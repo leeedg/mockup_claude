@@ -108,7 +108,7 @@ const MR = {
     {id:'RCP-J10',name:'TaN_20nm_ALD',eq:'PVD-02',pm:'PM-B',wafers:[{no:'W07',st:'pass'},{no:'W08',st:'pass'},{no:'W09',st:'pass'}]},
   ],
 };
-const SITE_XY={C:[0,0],N:[0,-0.7],NE:[0.5,-0.5],E:[0.7,0],SE:[0.5,0.5],S:[0,-0.7],SW:[-0.5,0.5],W:[-0.7,0],NW:[-0.5,-0.5]};
+const SITE_XY={C:[0,0],N:[0,-0.7],NE:[0.5,-0.5],E:[0.7,0],SE:[0.5,0.5],S:[0,0.7],SW:[-0.5,0.5],W:[-0.7,0],NW:[-0.5,-0.5]};
 let mode='single', sbIdx={single:0,multiple:0}, singleView='predict', multiView='predict', activeMultiFoup='';
 let charts={}, singleFilters={dateS:'',dateE:'',eq:'',pm:'',foup:''}, singleSel={foup:'',recipes:new Set(),wafers:{}}, allSel={};
 const pages=['Home','Thickness Average','Thickness Pointwise','Stress','Particle Range'];
@@ -198,7 +198,7 @@ function bindMulti(){
   byId('mAdd')?.addEventListener('click',()=>{const f=byId('mFoup').value;allSel[f]??={recipes:new Set(),wafers:{}};activeMultiFoup=f;render();});
   document.querySelectorAll('[data-ft]').forEach(t=>t.onclick=()=>{activeMultiFoup=t.dataset.ft;render();});
   document.querySelectorAll('[data-mrid]').forEach(c=>c.onclick=()=>{const rid=c.dataset.mrid;const sel=allSel[activeMultiFoup];if(sel.recipes.has(rid)){sel.recipes.delete(rid);Object.keys(sel.wafers).filter(k=>k.startsWith(rid+'__')).forEach(k=>delete sel.wafers[k]);}else sel.recipes.add(rid);render();});
-  document.querySelectorAll('[data-mwf]').forEach(c=>c.onchange=()=>{const [rid,no]=c.dataset.mwf.split('__');const rec=(MR[activeMultiFoup]||[]).find(r=>r.id===rid);const st=rec.wafers.find(w=>w.no===no).st;const sel=allSel[activeMultiFoup];if(c.checked)sel.wafers[c.dataset.mwf]={no,st,rid,foup:activeMultiFoup};else delete sel.wafers[c.dataset.mwf];render();});
+  document.querySelectorAll('[data-mwf]').forEach(c=>c.onchange=()=>{const [rid,no]=c.dataset.mwf.split('__');const rec=(MR[activeMultiFoup]||[]).find(r=>r.id===rid);const st=rec?.wafers.find(w=>w.no===no)?.st||'pass';const sel=allSel[activeMultiFoup];if(c.checked)sel.wafers[c.dataset.mwf]={no,st,rid,foup:activeMultiFoup};else delete sel.wafers[c.dataset.mwf];render();});
   byId('mAll')?.addEventListener('click',()=>{const sel=allSel[activeMultiFoup];(MR[activeMultiFoup]||[]).filter(r=>sel.recipes.has(r.id)).forEach(r=>r.wafers.forEach(w=>sel.wafers[`${r.id}__${w.no}`]={no:w.no,st:w.st,rid:r.id,foup:activeMultiFoup}));render();});
   byId('mClear')?.addEventListener('click',()=>{allSel[activeMultiFoup].wafers={};render();});
   document.querySelectorAll('[data-rmw]').forEach(b=>b.onclick=()=>{const [f,k]=b.dataset.rmw.split('|');delete allSel[f].wafers[k];render();});

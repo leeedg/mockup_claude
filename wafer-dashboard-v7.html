@@ -1,0 +1,253 @@
+<!doctype html>
+<html lang="ko" data-theme="arctic">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Wafer Dashboard v7</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    :root{--bg-base:#f0f4f8;--bg-surface:#fff;--bg-card:#fff;--border:#dde3ec;--accent:#2563eb;--accent2:#16a34a;--accent3:#dc2626;--accent4:#7c3aed;--accent5:#d97706;--text-primary:#1e293b;--text-muted:#64748b;--grid-line:rgba(0,0,0,.06);--shadow:0 1px 4px rgba(0,0,0,.07),0 4px 16px rgba(0,0,0,.04);}
+    [data-theme="arctic"]{--bg-base:#f0f4f8;--bg-surface:#fff;--bg-card:#fff;--border:#dde3ec;--accent:#2563eb;--accent2:#16a34a;--accent3:#dc2626;--accent4:#7c3aed;--accent5:#d97706;--text-primary:#1e293b;--text-muted:#64748b;--grid-line:rgba(0,0,0,.06);--shadow:0 1px 4px rgba(0,0,0,.07),0 4px 16px rgba(0,0,0,.04);}
+    [data-theme="sand"]{--bg-base:#faf7f2;--bg-surface:#fff9f0;--bg-card:#fff;--border:#e8dece;--accent:#b45309;--accent2:#15803d;--accent3:#b91c1c;--accent4:#6d28d9;--accent5:#0369a1;--text-primary:#292219;--text-muted:#78624a;--grid-line:rgba(0,0,0,.05);--shadow:0 1px 4px rgba(180,83,9,.08),0 4px 16px rgba(0,0,0,.04);}
+    [data-theme="mint"]{--bg-base:#f0faf8;--bg-surface:#fff;--bg-card:#fff;--border:#c7e8e0;--accent:#0d7a6b;--accent2:#1d6db5;--accent3:#c0392b;--accent4:#7c3aed;--accent5:#d97706;--text-primary:#0f2e29;--text-muted:#4a7c74;--grid-line:rgba(0,0,0,.06);--shadow:0 1px 4px rgba(13,122,107,.08),0 4px 16px rgba(0,0,0,.04);}
+    [data-theme="navy"]{--bg-base:#0d1117;--bg-surface:#161b22;--bg-card:#1c2330;--border:#30363d;--accent:#58a6ff;--accent2:#3fb950;--accent3:#f78166;--accent4:#d2a8ff;--accent5:#e3b341;--text-primary:#e6edf3;--text-muted:#8b949e;--grid-line:rgba(255,255,255,.06);--shadow:0 1px 4px rgba(0,0,0,.3),0 4px 16px rgba(0,0,0,.2);}
+    [data-theme="carbon"]{--bg-base:#0a0a0a;--bg-surface:#111;--bg-card:#181818;--border:#2a2a2a;--accent:#00d084;--accent2:#00b4d8;--accent3:#ff4757;--accent4:#a78bfa;--accent5:#ffd32a;--text-primary:#e8ffe8;--text-muted:#5a7a5a;--grid-line:rgba(0,208,132,.07);--shadow:0 1px 4px rgba(0,0,0,.5),0 4px 16px rgba(0,0,0,.3);}
+    [data-theme="eclipse"]{--bg-base:#12101a;--bg-surface:#1a1726;--bg-card:#201d30;--border:#332f4a;--accent:#9d7fe8;--accent2:#56cfe1;--accent3:#ff6b9d;--accent4:#f9a825;--accent5:#5cf0b0;--text-primary:#ede8ff;--text-muted:#8478aa;--grid-line:rgba(157,127,232,.07);--shadow:0 1px 4px rgba(0,0,0,.4),0 4px 16px rgba(0,0,0,.25);}
+    *{box-sizing:border-box} body{margin:0;font-family:Inter,Segoe UI,Arial,sans-serif;background:var(--bg-base);color:var(--text-primary)}
+    .top{display:flex;justify-content:space-between;align-items:center;padding:12px 16px;background:var(--bg-surface);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:10}
+    .tabs{display:flex;gap:8px;flex-wrap:wrap}.tab{border:1px solid var(--border);padding:8px 12px;border-radius:999px;cursor:pointer;font-weight:700;background:var(--bg-card)}.tab.active{color:#fff}
+    .tab.single.active{background:var(--accent)}.tab.multiple.active{background:var(--accent2)}.tab.contact.active{background:var(--accent4)}
+    .top-right{display:flex;align-items:center;gap:10px}.badge{padding:4px 8px;border-radius:999px;background:color-mix(in srgb,var(--accent2) 20%,transparent);color:var(--accent2);font-size:11px;font-weight:700}
+    .avatar{width:28px;height:28px;border-radius:50%;display:grid;place-items:center;background:var(--accent);color:#fff;font-weight:700}
+    .layout{display:flex;min-height:calc(100vh - 58px)}
+    aside{width:230px;background:var(--bg-surface);border-right:1px solid var(--border);padding:12px;display:flex;flex-direction:column;gap:8px}
+    .sb{padding:10px 12px;border-radius:10px;border:1px solid transparent;cursor:pointer;font-weight:600}.sb.active{border-color:var(--border);background:color-mix(in srgb,var(--accent) 8%,transparent)}
+    main{flex:1;padding:14px;overflow:auto}
+    .card{background:var(--bg-card);border:1px solid var(--border);border-radius:12px;box-shadow:var(--shadow);padding:12px}
+    .row{display:flex;gap:10px;flex-wrap:wrap;align-items:end}
+    .field{display:flex;flex-direction:column;gap:6px;min-width:140px}.field label{font-size:12px;color:var(--text-muted);font-weight:600}
+    input,select,button{padding:8px 10px;border:1px solid var(--border);border-radius:8px;background:var(--bg-surface);color:var(--text-primary)}
+    button{cursor:pointer;font-weight:700}.btn{background:var(--accent);color:#fff;border-color:transparent}.btn2{background:var(--accent2);color:#fff;border-color:transparent}
+    .chips{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}.chip{display:inline-flex;gap:6px;align-items:center;padding:4px 10px;border-radius:999px;background:color-mix(in srgb,var(--accent) 10%,transparent);border:1px solid var(--border);font-size:12px}
+    .chip button{padding:0;border:none;background:transparent;color:var(--text-muted);font-size:13px}
+    .grid3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+    .rcp{padding:10px;border:1px solid var(--border);border-radius:10px;background:var(--bg-surface);cursor:pointer}
+    .rcp.on{outline:2px solid var(--accent2);background:color-mix(in srgb,var(--accent2) 8%,transparent)}
+    .wafer-group{margin-top:10px;padding:10px;border:1px solid var(--border);border-radius:10px}
+    .wafer-list{display:flex;gap:10px;flex-wrap:wrap;margin-top:8px}
+    .wf{display:inline-flex;align-items:center;gap:6px;font-size:12px;padding:5px 8px;border:1px solid var(--border);border-radius:999px}
+    .dot{width:8px;height:8px;border-radius:50%}.dot.pass{background:#16a34a}.dot.warn{background:#d97706}.dot.fail{background:#dc2626}
+    .sum{margin-top:10px;padding-top:10px;border-top:1px dashed var(--border)}
+    .banner{margin-bottom:12px;padding:10px 12px;border:1px solid var(--border);border-radius:10px;background:color-mix(in srgb,var(--accent) 6%,transparent);font-weight:600}
+    .page-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;gap:10px}
+    .toggle{display:inline-flex;border:1px solid var(--border);border-radius:10px;overflow:hidden}.toggle button{border:none;border-radius:0}.toggle button.on{background:var(--accent);color:#fff}
+    .charts{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.ch{height:240px}
+    .tabs2{display:flex;gap:8px;flex-wrap:wrap}.ftab{padding:6px 10px;border:1px solid var(--border);border-radius:999px;cursor:pointer}.ftab.on{background:var(--accent2);color:#fff}
+    .anbar{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-top:10px;padding:10px;border:1px dashed var(--border);border-radius:10px}
+    .heat-wrap{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+    .hm{padding:8px;border:1px solid var(--border);border-radius:10px;display:flex;flex-direction:column;align-items:center;gap:5px}
+    .tbl-wrap{overflow-x:auto;border-radius:10px;border:1px solid var(--border);max-height:440px;overflow-y:auto;}
+    table.dtbl{width:100%;border-collapse:collapse;font-size:12.5px;}
+    .dtbl thead{position:sticky;top:0;z-index:2;}
+    .dtbl th{padding:10px 13px;text-align:left;font-size:10.5px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:.7px;background:var(--bg-base);border-bottom:2px solid var(--border);white-space:nowrap;}
+    .dtbl td{padding:9px 13px;border-bottom:1px solid var(--border);white-space:nowrap;}
+    .dtbl tbody tr:last-child td{border-bottom:none;}
+    .dtbl tbody tr:hover td{background:color-mix(in srgb,var(--accent) 4%,transparent);}
+    .sts{display:inline-flex;align-items:center;gap:4px;padding:3px 9px;border-radius:99px;font-size:11px;font-weight:700;}
+    .sts.pass{background:color-mix(in srgb,#16a34a 10%,transparent);color:#16a34a;border:1px solid color-mix(in srgb,#16a34a 25%,transparent);}
+    .sts.warn{background:color-mix(in srgb,#d97706 10%,transparent);color:#d97706;border:1px solid color-mix(in srgb,#d97706 25%,transparent);}
+    .sts.fail{background:color-mix(in srgb,#dc2626 10%,transparent);color:#dc2626;border:1px solid color-mix(in srgb,#dc2626 25%,transparent);}
+    .stat-row{display:flex;gap:22px;padding:8px 2px 12px;}
+    .stat-item{display:flex;flex-direction:column;gap:2px;}
+    .stat-val{font-size:20px;font-weight:800;}
+    .stat-lbl{font-size:10.5px;color:var(--text-muted);font-weight:600;text-transform:uppercase;letter-spacing:.5px;}
+    .hide{display:none!important}
+    @media (max-width:1100px){.grid3{grid-template-columns:repeat(2,minmax(0,1fr))}.heat-wrap{grid-template-columns:repeat(2,minmax(0,1fr))}}
+    @media (max-width:840px){aside{display:none}.charts{grid-template-columns:1fr}.grid3,.heat-wrap{grid-template-columns:1fr}}
+  </style>
+</head>
+<body>
+  <header class="top">
+    <div class="tabs">
+      <div class="tab single active" data-mode="single">🔬 Single</div>
+      <div class="tab multiple" data-mode="multiple">⚡ Multiple</div>
+      <div class="tab contact" data-mode="contact">✉️ Contact</div>
+    </div>
+    <div class="top-right">
+      <select id="themeSel">
+        <option>arctic</option><option>sand</option><option>mint</option><option>navy</option><option>carbon</option><option>eclipse</option>
+      </select>
+      <span class="badge">LIVE</span>
+      <span class="avatar">W</span>
+    </div>
+  </header>
+  <div class="layout">
+    <aside id="sidebar"></aside>
+    <main id="main"></main>
+  </div>
+<script>
+const MR = {
+  'FOUP-001':[
+    {id:'RCP-A01',name:'SiO2_250nm_STD',eq:'CVD-01',pm:'PM-A',wafers:[{no:'W01',st:'pass'},{no:'W02',st:'pass'},{no:'W03',st:'warn'},{no:'W04',st:'pass'},{no:'W05',st:'pass'},{no:'W06',st:'fail'}]},
+    {id:'RCP-B02',name:'SiN_180nm_HK',eq:'CVD-02',pm:'PM-B',wafers:[{no:'W07',st:'pass'},{no:'W08',st:'pass'},{no:'W09',st:'pass'},{no:'W10',st:'warn'}]},
+    {id:'RCP-C03',name:'TiN_50nm_PVD',eq:'PVD-01',pm:'PM-C',wafers:[{no:'W11',st:'pass'},{no:'W12',st:'pass'},{no:'W13',st:'fail'},{no:'W14',st:'pass'}]},
+  ],
+  'FOUP-002':[
+    {id:'RCP-D04',name:'Al2O3_30nm_ALD',eq:'CVD-03',pm:'PM-A',wafers:[{no:'W01',st:'pass'},{no:'W02',st:'warn'},{no:'W03',st:'pass'},{no:'W04',st:'pass'}]},
+    {id:'RCP-E05',name:'HfO2_10nm_HiK',eq:'PVD-02',pm:'PM-D',wafers:[{no:'W05',st:'fail'},{no:'W06',st:'pass'},{no:'W07',st:'pass'}]},
+  ],
+  'FOUP-003':[
+    {id:'RCP-F06',name:'SiO2_400nm_THK',eq:'CVD-01',pm:'PM-B',wafers:[{no:'W01',st:'pass'},{no:'W02',st:'pass'},{no:'W03',st:'pass'},{no:'W04',st:'warn'},{no:'W05',st:'pass'}]},
+    {id:'RCP-G07',name:'SiGe_100nm_EPI',eq:'CVD-02',pm:'PM-C',wafers:[{no:'W06',st:'pass'},{no:'W07',st:'fail'},{no:'W08',st:'pass'}]},
+  ],
+  'FOUP-004':[
+    {id:'RCP-H08',name:'W_80nm_PVD',eq:'PVD-01',pm:'PM-A',wafers:[{no:'W01',st:'pass'},{no:'W02',st:'pass'},{no:'W03',st:'pass'}]},
+  ],
+  'FOUP-005':[
+    {id:'RCP-I09',name:'SiO2_100nm_STD',eq:'CVD-03',pm:'PM-D',wafers:[{no:'W01',st:'warn'},{no:'W02',st:'pass'},{no:'W03',st:'pass'},{no:'W04',st:'fail'},{no:'W05',st:'pass'},{no:'W06',st:'pass'}]},
+    {id:'RCP-J10',name:'TaN_20nm_ALD',eq:'PVD-02',pm:'PM-B',wafers:[{no:'W07',st:'pass'},{no:'W08',st:'pass'},{no:'W09',st:'pass'}]},
+  ],
+};
+const SITE_XY={C:[0,0],N:[0,-0.7],NE:[0.5,-0.5],E:[0.7,0],SE:[0.5,0.5],S:[0,0.7],SW:[-0.5,0.5],W:[-0.7,0],NW:[-0.5,-0.5]};
+let mode='single', sbIdx={single:0,multiple:0}, singleView='predict', multiView='predict', activeMultiFoup='';
+let charts={}, singleFilters={dateS:'',dateE:'',eq:'',pm:'',foup:''}, singleSel={foup:'',recipes:new Set(),wafers:{}}, allSel={};
+const pages=['Home','Thickness Average','Thickness Pointwise','Stress','Particle Range'];
+const byId=id=>document.getElementById(id);
+function seededRng(seed){let s=seed%2147483647;if(s<=0)s+=2147483646;return()=>{s=s*16807%2147483647;return(s-1)/2147483646;};}
+function stTag(v){return `<span class="sts ${v}">${v.toUpperCase()}</span>`}
+function statFromNum(v,lo,hi){return v<lo?'fail':v>hi?'warn':'pass';}
+function statusByParticle(n){return n>20?'fail':n>=10?'warn':'pass';}
+function selWafersSingle(){return Object.values(singleSel.wafers).map(w=>{const seed=(singleSel.foup+w.rid+w.no).split('').reduce((a,c)=>a+c.charCodeAt(0),0);const rng=seededRng(seed);return{...w,tp:+(718+rng()*14).toFixed(2),ta:+(716+rng()*18).toFixed(2),sp:+(155+rng()*43).toFixed(1),sa:+(150+rng()*55).toFixed(1),pp:Math.round(2+rng()*23),pa:Math.round(1+rng()*27),sites_pred:Array.from({length:9},()=>+(718+rng()*14).toFixed(1)),sites_act:Array.from({length:9},()=>+(716+rng()*18).toFixed(1))};});}
+function clearCharts(){Object.values(charts).forEach(c=>c?.destroy?.());charts={};}
+function mkChart(id,cfg){const el=byId(id);if(!el) return; charts[id]=new Chart(el.getContext('2d'),cfg);}
+function nav(){document.querySelectorAll('.tab').forEach(t=>t.classList.toggle('active',t.dataset.mode===mode));render();}
+function onSB(i){sbIdx[mode]=i;render();}
+function setTheme(v){document.documentElement.setAttribute('data-theme',v)}
+function renderSidebar(){const sb=byId('sidebar');if(mode==='contact'){sb.classList.add('hide');return;}sb.classList.remove('hide');sb.innerHTML=pages.map((p,i)=>`<div class="sb ${sbIdx[mode]===i?'active':''}" data-i="${i}">${p}</div>`).join('');sb.querySelectorAll('.sb').forEach(b=>b.onclick=()=>onSB(+b.dataset.i));}
+function render(){renderSidebar();const m=byId('main');clearCharts();if(mode==='contact'){m.innerHTML='<div class="card"><h3>Contact</h3><p>문의: process.ai@fab.example</p></div>';return;}if(mode==='single'){m.innerHTML=sbIdx.single===0?singleHomeTpl():singleAnalysisTpl(sbIdx.single);bindSingle();if(sbIdx.single>0)renderSingleCharts();}if(mode==='multiple'){m.innerHTML=sbIdx.multiple===0?multiHomeTpl():multiAnalysisTpl(sbIdx.multiple);bindMulti();if(sbIdx.multiple>0&&window._mwafers)renderMultiPages(window._mwafers);}}
+function opt(arr,val=''){return ['<option value="">All</option>',...arr.map(v=>`<option value="${v}" ${val===v?'selected':''}>${v}</option>`)].join('');}
+function singleHomeTpl(){
+  const eq=[...new Set(Object.values(MR).flat().map(r=>r.eq))], pm=[...new Set(Object.values(MR).flat().map(r=>r.pm))], fups=Object.keys(MR);
+  const recs=(MR[singleSel.foup]||[]).filter(r=>(!singleFilters.eq||r.eq===singleFilters.eq)&&(!singleFilters.pm||r.pm===singleFilters.pm));
+  const selected=recs.filter(r=>singleSel.recipes.has(r.id));
+  const groups=selected.map(r=>`<div class="wafer-group"><b>📋 ${r.id}</b> · ${r.name}<div class="wafer-list">${r.wafers.map(w=>{const k=`${r.id}__${w.no}`;return `<label class="wf"><input type="checkbox" data-wf="${k}" ${singleSel.wafers[k]?'checked':''}><span class="dot ${w.st}"></span>${w.no}</label>`}).join('')}</div></div>`).join('');
+  const chips=Object.entries(singleFilters).filter(([,v])=>v).map(([k,v])=>`<span class="chip">${k}: ${v}<button data-rm="${k}">×</button></span>`).join('');
+  const sum=Object.values(singleSel.wafers);
+  const byR={};sum.forEach(w=>(byR[w.rid]??=[]).push(w));
+  return `<div class="card"><h3>Single Home</h3><div class="row">
+    <div class="field"><label>Date Start</label><input type="date" id="sDateS" value="${singleFilters.dateS}"></div>
+    <div class="field"><label>Date End</label><input type="date" id="sDateE" value="${singleFilters.dateE}"></div>
+    <div class="field"><label>Equipment</label><select id="sEq">${opt(eq,singleFilters.eq)}</select></div>
+    <div class="field"><label>PM</label><select id="sPm">${opt(pm,singleFilters.pm)}</select></div>
+    <div class="field"><label>FOUP</label><select id="sFoup">${opt(fups,singleSel.foup||singleFilters.foup)}</select></div>
+    <button id="sApply" class="btn">Apply</button>
+  </div><div class="chips">${chips||'<span class="chip">No filters applied</span>'}</div></div>
+  ${singleSel.foup?`<div class="card" style="margin-top:10px"><h4>② Recipe 선택 패널</h4><div class="grid3">${recs.map(r=>`<div class="rcp ${singleSel.recipes.has(r.id)?'on':''}" data-rid="${r.id}"><b>${r.id}</b><div>${r.name}</div><small>${r.eq} · ${r.pm}</small></div>`).join('')||'필터 결과 없음'}</div></div>`:''}
+  ${singleSel.recipes.size?`<div class="card" style="margin-top:10px"><div class="row" style="justify-content:space-between"><h4 style="margin:0">③ Wafer 선택 패널</h4><div><button id="sAll">All</button> <button id="sClear">Clear</button></div></div>${groups}</div>`:''}
+  <div class="card sum"><div class="row" style="justify-content:space-between"><div><b>④ Selection Summary</b><div>${sum.length} wafer(s) selected</div></div><button id="sAnalyze" class="btn">🔍 Analyze →</button></div><div class="chips">${Object.entries(byR).map(([rid,arr])=>arr.map(w=>`<span class="chip"><span class="dot ${w.st}"></span>${rid}:${w.no}</span>`).join('')).join('')||'<span class="chip">선택 없음</span>'}</div></div>`;
+}
+function singleBanner(){const n=Object.keys(singleSel.wafers).length;if(!singleSel.foup||!n)return '← Home에서 Recipe/Wafer를 먼저 선택해주세요';const r=[...new Set(Object.values(singleSel.wafers).map(w=>w.rid))].join(', ');return `📦 ${singleSel.foup} · 📋 ${r} · ${n} wafers selected`;}
+function singleAnalysisTpl(i){const p=pages[i];const idMap={1:['p_at','p_al','p_ac','p_ae','a_at','a_al','a_ah','a_ad'],2:['p_pr','p_pb','p_pl','a_pr','a_pd','a_pl'],3:['p_st','p_ss','p_sc','p_se','a_st','a_ss','a_sx','a_sd'],4:['p_pat','p_pas','p_pae','p_paf','a_pat','a_pas','a_pae','a_pad']};
+  const pred=idMap[i].slice(0,idMap[i].length/2), act=idMap[i].slice(idMap[i].length/2);
+  return `<div class="banner">${singleBanner()}</div><div class="page-head"><h3>${p}</h3><div class="toggle"><button id="svPred" class="${singleView==='predict'?'on':''}">Predict</button><button id="svAct" class="${singleView==='actual'?'on':''}">Actual</button></div></div><div class="charts">${(singleView==='predict'?pred:act).map(id=>`<div class="card"><canvas class="ch" id="${id}"></canvas></div>`).join('')}</div>`;
+}
+function bindSingle(){
+  byId('sApply')?.addEventListener('click',()=>{const prev=singleSel.foup;singleFilters={dateS:byId('sDateS').value,dateE:byId('sDateE').value,eq:byId('sEq').value,pm:byId('sPm').value,foup:byId('sFoup').value};singleSel.foup=singleFilters.foup;if(prev&&prev!==singleSel.foup){singleSel={foup:singleSel.foup,recipes:new Set(),wafers:{}}}render();});
+  document.querySelectorAll('[data-rm]').forEach(b=>b.onclick=()=>{singleFilters[b.dataset.rm]='';if(b.dataset.rm==='foup'){singleSel={foup:'',recipes:new Set(),wafers:{}}}render();});
+  document.querySelectorAll('.rcp').forEach(c=>c.onclick=()=>{const rid=c.dataset.rid;if(singleSel.recipes.has(rid)){singleSel.recipes.delete(rid);Object.keys(singleSel.wafers).filter(k=>k.startsWith(rid+'__')).forEach(k=>delete singleSel.wafers[k]);}else singleSel.recipes.add(rid);render();});
+  document.querySelectorAll('[data-wf]').forEach(c=>c.onchange=()=>{const [rid,no]=c.dataset.wf.split('__');const rec=(MR[singleSel.foup]||[]).find(r=>r.id===rid);const st=rec?.wafers.find(w=>w.no===no)?.st;if(!st)return;if(c.checked)singleSel.wafers[c.dataset.wf]={no,st,rid};else delete singleSel.wafers[c.dataset.wf];render();});
+  byId('sAll')?.addEventListener('click',()=>{(MR[singleSel.foup]||[]).filter(r=>singleSel.recipes.has(r.id)).forEach(r=>r.wafers.forEach(w=>singleSel.wafers[`${r.id}__${w.no}`]={no:w.no,st:w.st,rid:r.id}));render();});
+  byId('sClear')?.addEventListener('click',()=>{Object.keys(singleSel.wafers).forEach(k=>delete singleSel.wafers[k]);render();});
+  byId('sAnalyze')?.addEventListener('click',()=>onSB(1));
+  byId('svPred')?.addEventListener('click',()=>{singleView='predict';render();});
+  byId('svAct')?.addEventListener('click',()=>{singleView='actual';render();});
+}
+function renderSingleCharts(){
+  const ws=selWafersSingle();const lbs=ws.map(w=>`${w.rid}-${w.no}`);const vals=ws.map(w=>w.tp), vals2=ws.map(w=>w.ta), stress=ws.map(w=>w.sp), stressA=ws.map(w=>w.sa), parts=ws.map(w=>w.pp), partsA=ws.map(w=>w.pa);
+  const mk=(id,t,d)=>mkChart(id,{type:t,data:d,options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:true}}}});
+  const line=(lb,data,c)=>({labels:lbs.length?lbs:['NA'],datasets:[{label:lb,data:data.length?data:[0],borderColor:c,backgroundColor:c,tension:.3}]});
+  const bar=(lb,data,c)=>({labels:lbs.length?lbs:['NA'],datasets:[{label:lb,data:data.length?data:[0],backgroundColor:c}]});
+  const radarData=(pred,act)=>({labels:['C','N','NE','E','SE','S','SW','W','NW'],datasets:[{label:'Predict',data:pred,borderColor:'#2563eb'},{label:'Actual',data:act,borderColor:'#dc2626'}]});
+  if(singleView==='predict'){
+    if(byId('p_at'))mk('p_at','line',line('Trend',vals,'#2563eb'));if(byId('p_al'))mk('p_al','bar',bar('Lot Avg',vals,'#16a34a'));if(byId('p_ac'))mk('p_ac','line',line('Confidence',vals.map(v=>v+2),'#d97706'));if(byId('p_ae'))mk('p_ae','bar',bar('By Equipment',vals2,'#7c3aed'));
+    if(byId('p_pr'))mk('p_pr','radar',radarData(ws[0]?.sites_pred||Array(9).fill(720),ws[0]?.sites_pred||Array(9).fill(720)));if(byId('p_pb'))mk('p_pb','bar',bar('Site Bar',ws[0]?.sites_pred||Array(9).fill(720),'#16a34a'));if(byId('p_pl'))mk('p_pl','line',{labels:['C','N','NE','E','SE','S','SW','W','NW'],datasets:ws.slice(0,3).map((w,i)=>({label:`${w.rid}-${w.no}`,data:w.sites_pred,borderColor:['#2563eb','#16a34a','#d97706'][i]}))});
+    if(byId('p_st'))mk('p_st','line',line('Trend',stress,'#2563eb'));if(byId('p_ss'))mk('p_ss','bar',bar('Site Dist',stress,'#16a34a'));if(byId('p_sc'))mk('p_sc','line',line('Confidence',stress.map(v=>v+4),'#d97706'));if(byId('p_se'))mk('p_se','bar',bar('By Equipment',stress,'#7c3aed'));
+    if(byId('p_pat'))mk('p_pat','line',line('Trend',parts,'#2563eb'));if(byId('p_pas'))mk('p_pas','bar',{labels:['0-1μm','1-3μm','3-5μm','5μm+'],datasets:[{label:'Size Range',data:[12,9,5,3],backgroundColor:'#16a34a'}]});if(byId('p_pae'))mk('p_pae','bar',bar('By Equipment',parts,'#7c3aed'));if(byId('p_paf'))mk('p_paf','bar',{labels:Object.keys(MR),datasets:[{label:'By Foup',data:Object.keys(MR).map((f,i)=>4+i),backgroundColor:'#d97706'}]});
+  } else {
+    if(byId('a_at'))mk('a_at','line',line('Trend',vals2,'#2563eb'));if(byId('a_al'))mk('a_al','bar',bar('Lot Avg',vals2,'#16a34a'));if(byId('a_ah'))mk('a_ah','bar',{labels:['716-720','720-724','724-728','728+'],datasets:[{label:'Histogram',data:[2,5,3,1],backgroundColor:'#d97706'}]});if(byId('a_ad'))mk('a_ad','bar',bar('Delta',vals2.map((v,i)=>+(v-(vals[i]||v)).toFixed(2)),'#dc2626'));
+    if(byId('a_pr'))mk('a_pr','radar',radarData(ws[0]?.sites_pred||Array(9).fill(720),ws[0]?.sites_act||Array(9).fill(719)));if(byId('a_pd'))mk('a_pd','bar',bar('Deviation',(ws[0]?.sites_act||Array(9).fill(719)).map((v,i)=>+(v-(ws[0]?.sites_pred?.[i]||v)).toFixed(2)),'#dc2626'));if(byId('a_pl'))mk('a_pl','line',{labels:['C','N','NE','E','SE','S','SW','W','NW'],datasets:ws.slice(0,3).map((w,i)=>({label:`${w.rid}-${w.no}`,data:w.sites_act,borderColor:['#2563eb','#16a34a','#d97706'][i]}))});
+    if(byId('a_st'))mk('a_st','line',line('Trend',stressA,'#2563eb'));if(byId('a_ss'))mk('a_ss','bar',bar('Site',stressA,'#16a34a'));if(byId('a_sx'))mk('a_sx','scatter',{datasets:[{label:'Thickness vs Stress',data:ws.map(w=>({x:w.ta,y:w.sa})),backgroundColor:'#7c3aed'}]});if(byId('a_sd'))mk('a_sd','bar',bar('Delta',stressA.map((v,i)=>+(v-(stress[i]||v)).toFixed(2)),'#dc2626'));
+    if(byId('a_pat'))mk('a_pat','line',line('Trend',partsA,'#2563eb'));if(byId('a_pas'))mk('a_pas','bar',{indexAxis:'y',labels:['0-1μm','1-3μm','3-5μm','5μm+'],datasets:[{label:'Size',data:[10,11,4,2],backgroundColor:'#16a34a'}]});if(byId('a_pae'))mk('a_pae','bar',bar('By Equipment',partsA,'#7c3aed'));if(byId('a_pad'))mk('a_pad','bar',bar('Delta',partsA.map((v,i)=>v-(parts[i]||v)),'#dc2626'));
+  }
+}
+function multiHomeTpl(){
+  const fups=Object.keys(MR);
+  const cur=allSel[activeMultiFoup]||{recipes:new Set(),wafers:{}};
+  const recs=(MR[activeMultiFoup]||[]);
+  const grouped=recs.filter(r=>cur.recipes.has(r.id)).map(r=>`<div class="wafer-group"><b>📋 ${r.id}</b><div class="wafer-list">${r.wafers.map(w=>{const k=`${r.id}__${w.no}`;return `<label class="wf"><input type="checkbox" data-mwf="${k}" ${cur.wafers[k]?'checked':''}><span class="dot ${w.st}"></span>${w.no}</label>`}).join('')}</div></div>`).join('');
+  const sumBlocks=Object.entries(allSel).map(([f,sel])=>`<div class="card" style="margin:6px 0"><b>📦 ${f}</b> · ${Object.keys(sel.wafers).length} wafers<div class="chips">${Object.entries(sel.wafers).map(([k,w])=>`<span class="chip"><span class="dot ${w.st}"></span>${w.rid}:${w.no}<button data-rmw="${f}|${k}">×</button></span>`).join('')||'<span class="chip">없음</span>'}</div></div>`).join('');
+  const total=Object.values(allSel).reduce((a,s)=>a+Object.keys(s.wafers).length,0);
+  return `<div class="card"><h3>Multiple Home</h3><div class="row"><div class="field"><label>FOUP</label><select id="mFoup">${fups.map(f=>`<option value="${f}">${f}</option>`).join('')}</select></div><button id="mAdd" class="btn2">Add/Select FOUP</button></div><div class="tabs2" style="margin-top:8px">${Object.keys(allSel).map(f=>`<span class="ftab ${f===activeMultiFoup?'on':''}" data-ft="${f}">${f}</span>`).join('')||'선택된 FOUP 없음'}</div></div>
+  ${activeMultiFoup?`<div class="card" style="margin-top:10px"><h4>Recipe 선택 (${activeMultiFoup})</h4><div class="grid3">${recs.map(r=>`<div class="rcp ${cur.recipes.has(r.id)?'on':''}" data-mrid="${r.id}"><b>${r.id}</b><div>${r.name}</div><small>${r.eq} · ${r.pm}</small></div>`).join('')}</div></div>`:''}
+  ${activeMultiFoup&&cur.recipes.size?`<div class="card" style="margin-top:10px"><div class="row" style="justify-content:space-between"><h4 style="margin:0">Wafer 선택</h4><div><button id="mAll">All</button> <button id="mClear">Clear</button></div></div>${grouped}</div>`:''}
+  <div class="card" style="margin-top:10px"><h4>Selection Summary</h4>${sumBlocks||'<span class="chip">선택 없음</span>'}<div class="anbar"><span>누적 선택: <b>${total}</b> wafers</span><button id="mAnalyze" class="btn2">🔍 Analyze →</button></div></div>`;
+}
+function multiBanner(){const n=window._mwafers?.length||0;return n?`📦 ${[...new Set(window._mwafers.map(w=>w.foup))].join(', ')} · ${n} wafers selected`:'← Home에서 Recipe/Wafer를 먼저 선택해주세요';}
+function multiAnalysisTpl(i){const p=pages[i];return `<div class="banner">${multiBanner()}</div><div class="page-head"><h3>${p}</h3><div class="toggle"><button id="mvPred" class="${multiView==='predict'?'on':''}">Predict</button><button id="mvAct" class="${multiView==='actual'?'on':''}">Actual</button></div></div><div id="mContent"></div>`;}
+function bindMulti(){
+  byId('mAdd')?.addEventListener('click',()=>{const f=byId('mFoup').value;allSel[f]??={recipes:new Set(),wafers:{}};activeMultiFoup=f;render();});
+  document.querySelectorAll('[data-ft]').forEach(t=>t.onclick=()=>{activeMultiFoup=t.dataset.ft;render();});
+  document.querySelectorAll('[data-mrid]').forEach(c=>c.onclick=()=>{const rid=c.dataset.mrid;const sel=allSel[activeMultiFoup];if(sel.recipes.has(rid)){sel.recipes.delete(rid);Object.keys(sel.wafers).filter(k=>k.startsWith(rid+'__')).forEach(k=>delete sel.wafers[k]);}else sel.recipes.add(rid);render();});
+  document.querySelectorAll('[data-mwf]').forEach(c=>c.onchange=()=>{const [rid,no]=c.dataset.mwf.split('__');const rec=(MR[activeMultiFoup]||[]).find(r=>r.id===rid);const st=rec?.wafers.find(w=>w.no===no)?.st;if(!st)return;const sel=allSel[activeMultiFoup];if(c.checked)sel.wafers[c.dataset.mwf]={no,st,rid,foup:activeMultiFoup};else delete sel.wafers[c.dataset.mwf];render();});
+  byId('mAll')?.addEventListener('click',()=>{const sel=allSel[activeMultiFoup];(MR[activeMultiFoup]||[]).filter(r=>sel.recipes.has(r.id)).forEach(r=>r.wafers.forEach(w=>sel.wafers[`${r.id}__${w.no}`]={no:w.no,st:w.st,rid:r.id,foup:activeMultiFoup}));render();});
+  byId('mClear')?.addEventListener('click',()=>{allSel[activeMultiFoup].wafers={};render();});
+  document.querySelectorAll('[data-rmw]').forEach(b=>b.onclick=()=>{const [f,k]=b.dataset.rmw.split('|');delete allSel[f].wafers[k];render();});
+  byId('mAnalyze')?.addEventListener('click',()=>{startAnalysis();onSB(1);});
+  byId('mvPred')?.addEventListener('click',()=>{multiView='predict';render();});
+  byId('mvAct')?.addEventListener('click',()=>{multiView='actual';render();});
+}
+function startAnalysis(){renderMultiAnalysis();}
+function renderMultiAnalysis() {
+  const wafers = [];
+  Object.entries(allSel).forEach(([foup, sel]) => {
+    Object.values(sel.wafers).forEach(w => {
+      const seed = (foup+w.rid+w.no).split('').reduce((a,c)=>a+c.charCodeAt(0),0);
+      const rng = seededRng(seed);
+      wafers.push({
+        foup, rid: w.rid, no: w.no, st: w.st,
+        tp: +(718+rng()*14).toFixed(2),
+        ta: +(716+rng()*18).toFixed(2),
+        sp: +(155+rng()*43).toFixed(1),
+        sa: +(150+rng()*55).toFixed(1),
+        pp: Math.round(2+rng()*23),
+        pa: Math.round(1+rng()*27),
+        sites_pred: Array.from({length:9}, () => +(718+rng()*14).toFixed(1)),
+        sites_act:  Array.from({length:9}, () => +(716+rng()*18).toFixed(1)),
+      });
+    });
+  });
+  window._mwafers = wafers;
+  renderTATable(wafers);
+  renderHeatmaps(wafers);
+  renderSTTable(wafers);
+  renderPATable(wafers);
+  updateMultiBanners(wafers);
+}
+function updateMultiBanners(){const b=document.querySelector('.banner');if(b)b.textContent=multiBanner();}
+function renderMultiPages(wafers){if(mode!=='multiple'||sbIdx.multiple===0) return; if(sbIdx.multiple===1)renderTATable(wafers); if(sbIdx.multiple===2)renderHeatmaps(wafers); if(sbIdx.multiple===3)renderSTTable(wafers); if(sbIdx.multiple===4)renderPATable(wafers);}
+function tbl(cols,rows){return `<div class="tbl-wrap"><table class="dtbl"><thead><tr>${cols.map(c=>`<th>${c}</th>`).join('')}</tr></thead><tbody>${rows.join('')}</tbody></table></div>`}
+function renderTATable(w){const m=byId('mContent');if(!m||sbIdx.multiple!==1) return;const pred=tbl(['FOUP','Recipe','Wafer','Predicted(nm)','UCL','LCL','Status'],w.map(x=>`<tr><td>${x.foup}</td><td>${x.rid}</td><td>${x.no}</td><td>${x.tp}</td><td>730</td><td>718</td><td>${stTag(statFromNum(x.tp,718,730))}</td></tr>`));const act=tbl(['FOUP','Recipe','Wafer','Predicted','Actual','Δ','Status'],w.map(x=>{const d=+(x.ta-x.tp).toFixed(2);return `<tr><td>${x.foup}</td><td>${x.rid}</td><td>${x.no}</td><td>${x.tp}</td><td>${x.ta}</td><td>${d}</td><td>${stTag(statFromNum(x.ta,718,730))}</td></tr>`}));m.innerHTML=`<div class="stat-row"><div class="stat-item"><span class="stat-val">${w.length}</span><span class="stat-lbl">Wafers</span></div></div>${multiView==='predict'?pred:act}`;}
+function renderSTTable(w){const m=byId('mContent');if(!m||sbIdx.multiple!==3) return;const pred=tbl(['FOUP','Recipe','Wafer','Predicted(MPa)','RefHigh(200)','RefLow(150)','Status'],w.map(x=>`<tr><td>${x.foup}</td><td>${x.rid}</td><td>${x.no}</td><td>${x.sp}</td><td>200</td><td>150</td><td>${stTag(statFromNum(x.sp,150,200))}</td></tr>`));const act=tbl(['FOUP','Recipe','Wafer','Predicted','Actual','Δ','Status'],w.map(x=>{const d=+(x.sa-x.sp).toFixed(1);return `<tr><td>${x.foup}</td><td>${x.rid}</td><td>${x.no}</td><td>${x.sp}</td><td>${x.sa}</td><td>${d}</td><td>${stTag(statFromNum(x.sa,150,200))}</td></tr>`}));m.innerHTML=multiView==='predict'?pred:act;}
+function renderPATable(w){const m=byId('mContent');if(!m||sbIdx.multiple!==4) return;const pred=tbl(['FOUP','Recipe','Wafer','Count','SizeRange','Status'],w.map(x=>`<tr><td>${x.foup}</td><td>${x.rid}</td><td>${x.no}</td><td>${x.pp}</td><td>${x.pp<10?'0~10':x.pp<=20?'10~20':'20+'}</td><td>${stTag(statusByParticle(x.pp))}</td></tr>`));const act=tbl(['FOUP','Recipe','Wafer','Predicted','Actual','Δ','Status'],w.map(x=>{const d=x.pa-x.pp;return `<tr><td>${x.foup}</td><td>${x.rid}</td><td>${x.no}</td><td>${x.pp}</td><td>${x.pa}</td><td>${d}</td><td>${stTag(statusByParticle(x.pa))}</td></tr>`}));m.innerHTML=multiView==='predict'?pred:act;}
+function interpIDW(x,y,sites,p=2){let num=0,den=0;for(let i=0;i<9;i++){const [sx,sy]=Object.values(SITE_XY)[i],d=Math.hypot(x-sx,y-sy)||1e-6,w=1/(d**p);num+=w*sites[i];den+=w;}return num/den;}
+function grad(v,min,max){const t=Math.max(0,Math.min(1,(v-min)/(max-min||1)));const c=[[37,99,235],[6,182,212],[22,163,74],[234,179,8],[220,38,38]];const k=Math.min(3,Math.floor(t*4)),u=t*4-k,a=c[k],b=c[k+1];return `rgb(${Math.round(a[0]+(b[0]-a[0])*u)},${Math.round(a[1]+(b[1]-a[1])*u)},${Math.round(a[2]+(b[2]-a[2])*u)})`;}
+function dgrad(v,m){const t=Math.max(-m,Math.min(m,v));if(t<0){const q=(t+m)/m;return `rgb(${Math.round(255*q)},${Math.round(255*q)},255)`;}const q=t/m;return `rgb(255,${Math.round(255*(1-q))},${Math.round(255*(1-q))})`;}
+function drawHeat(canvas,sites,delta=false){const ctx=canvas.getContext('2d'),w=150,h=150,cx=75,cy=75,r=64;ctx.clearRect(0,0,w,h);const min=Math.min(...sites),max=Math.max(...sites);for(let py=0;py<h;py++)for(let px=0;px<w;px++){const nx=(px-cx)/r,ny=(py-cy)/r;if(nx*nx+ny*ny>1)continue;const v=interpIDW(nx,ny,sites);ctx.fillStyle=delta?dgrad(v,6):grad(v,min,max);ctx.fillRect(px,py,1,1);}ctx.strokeStyle='rgba(0,0,0,.35)';ctx.beginPath();ctx.arc(cx,cy,r,0,Math.PI*2);ctx.stroke();}
+function renderHeatmaps(w){const m=byId('mContent');if(!m||sbIdx.multiple!==2) return;const rows=w.map((x,i)=>`<div class="hm"><b>${x.foup}/${x.rid}/${x.no}</b><canvas id="hm_${i}" width="150" height="150"></canvas>${multiView==='actual'?`<canvas id="hd_${i}" width="150" height="150"></canvas><small>Delta</small>`:''}</div>`).join('');m.innerHTML=`<div class="heat-wrap">${rows||'<div class="card">No data</div>'}</div>`;w.forEach((x,i)=>{drawHeat(byId(`hm_${i}`),multiView==='predict'?x.sites_pred:x.sites_act);if(multiView==='actual'){drawHeat(byId(`hd_${i}`),x.sites_act.map((v,j)=>v-x.sites_pred[j]),true);}});}
+
+document.querySelectorAll('.tab').forEach(t=>t.onclick=()=>{mode=t.dataset.mode;nav();});
+byId('themeSel').addEventListener('change',e=>setTheme(e.target.value));
+setTheme('arctic');render();
+</script>
+</body>
+</html>

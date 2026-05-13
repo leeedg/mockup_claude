@@ -233,7 +233,7 @@ function renderMultiAnalysis() {
   renderPATable(wafers);
   updateMultiBanners(wafers);
 }
-function updateMultiBanners(){/* banner is rendered from state template */}
+function updateMultiBanners(){const b=document.querySelector('.banner');if(b)b.textContent=multiBanner();}
 function renderMultiPages(wafers){if(mode!=='multiple'||sbIdx.multiple===0) return; if(sbIdx.multiple===1)renderTATable(wafers); if(sbIdx.multiple===2)renderHeatmaps(wafers); if(sbIdx.multiple===3)renderSTTable(wafers); if(sbIdx.multiple===4)renderPATable(wafers);}
 function tbl(cols,rows){return `<div class="tbl-wrap"><table class="dtbl"><thead><tr>${cols.map(c=>`<th>${c}</th>`).join('')}</tr></thead><tbody>${rows.join('')}</tbody></table></div>`}
 function renderTATable(w){const m=byId('mContent');if(!m||sbIdx.multiple!==1) return;const pred=tbl(['FOUP','Recipe','Wafer','Predicted(nm)','UCL','LCL','Status'],w.map(x=>`<tr><td>${x.foup}</td><td>${x.rid}</td><td>${x.no}</td><td>${x.tp}</td><td>730</td><td>718</td><td>${stTag(statFromNum(x.tp,718,730))}</td></tr>`));const act=tbl(['FOUP','Recipe','Wafer','Predicted','Actual','Δ','Status'],w.map(x=>{const d=+(x.ta-x.tp).toFixed(2);return `<tr><td>${x.foup}</td><td>${x.rid}</td><td>${x.no}</td><td>${x.tp}</td><td>${x.ta}</td><td>${d}</td><td>${stTag(statFromNum(x.ta,718,730))}</td></tr>`}));m.innerHTML=`<div class="stat-row"><div class="stat-item"><span class="stat-val">${w.length}</span><span class="stat-lbl">Wafers</span></div></div>${multiView==='predict'?pred:act}`;}
